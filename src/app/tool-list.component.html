@@ -1,0 +1,12 @@
+<div id="content" class="row">
+    <div *ngFor="let tool of tools" class="col s12 m4">
+      <div class="card orange lighten-1">
+        <div class="card-content white-text">
+          <a href="/{{tool.url}}" >
+            <span class="card-title">{{tool.title}}</span>
+            <p>{{tool.title}}</p>
+          </a>
+        </div>
+      </div>
+    </div>
+</div>

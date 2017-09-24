@@ -1,0 +1,40 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Chrome against localhost, with sourcemaps",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:4200",
+            "sourceMaps": true,
+            //"diagnosticLogging": true,
+            "runtimeArgs": [
+                "--disable-web-security",
+                "--user-data-dir",
+                "--remote-debugging-port=9222"
+                ],
+            "webRoot": "${workspaceRoot}",
+            "userDataDir": "${workspaceRoot}/.vscode/chrome",
+            "sourceMapPathOverrides": {
+                "webpack:/C:/Users/jonathan.spruyt/Documents/DEV/Projects/AXLng/axlng-app/~/*":"${workspaceRoot}/axlng-app/node_modules/*"
+                //"webpack:/C:*":"C:/*"
+            }
+        },
+        {
+            "name": "Attach to Chrome, with sourcemaps",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "sourceMaps": true,
+            //"diagnosticLogging": true,
+            "webRoot": "${workspaceRoot}",
+            "sourceMapPathOverrides": {
+                "webpack:/C:/Users/jonathan.spruyt/Documents/DEV/Projects/AXLng/axlng-app/~/*":"${workspaceRoot}/axlng-app/node_modules/*"
+                //"webpack:/C:*":"C:/*"
+            }
+        }
+    ]
+}
