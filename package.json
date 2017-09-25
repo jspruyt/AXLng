@@ -24,6 +24,7 @@
     "core-js": "^2.4.1",
     "ngx-soap": "^0.2.1",
     "rxjs": "^5.1.0",
+    "transliteration": "^1.6.2",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-interface IFragment {
+export interface IFragment {
 
     render(): string;
 
@@ -7,25 +7,27 @@ interface IFragment {
 export class Pipe {
 
     constructor(
-        private pipe: string,
-        private parameter: string
+        private pipe: string = '',
+        private parameter: string = ''
     ) {}
 
     public apply(input) {
         return this[this.pipe](input, this.parameter);
     }
 
-    private upperCase(input: string, parameter: string) {
+    private upper(input: string, parameter: string) {
         return input.toUpperCase();
     }
 
+    private ascii(input: string, parameter: string) {
+
+    }
 
 }
 
-
 export class TextFragment implements IFragment {
     constructor (
-        private text: string,
+        private text: string = '',
     ) {}
 
     public render() {
@@ -36,15 +38,18 @@ export class TextFragment implements IFragment {
 
 export class VariableFragment implements IFragment {
 
-
     constructor (
-        private variable: string,
-        private value: string,
-        private pipes: Pipe[]
+        private variable: string = '',
+        private value: string = '',
+        private pipes: Pipe[] = []
     ) {}
 
     public render() {
-        return '';
+        let render: string = this.value;
+        for (const pipe of this.pipes) {
+            render = pipe.apply(render);
+        }
+        return render;
     }
 
     public addPipe(pipe: Pipe) {
