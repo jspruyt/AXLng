@@ -19,8 +19,42 @@ export class Pipe {
         return input.toUpperCase();
     }
 
-    private ascii(input: string, parameter: string) {
+    private lower(input: string, parameter: string) {
+        return input.toLowerCase();
+    }
 
+    private ascii(input: string, parameter: string) {
+        return input;
+    }
+
+    private left(input: string, parameter: string) {
+        const parameterNumber = Number(parameter);
+        if (!isNaN(parameterNumber)) {
+            if (parameterNumber === 0) {
+                return input;
+            } else if (parameterNumber > 0) {
+                return input.substring(0, parameterNumber);
+            } else {
+                return input.substring(-parameterNumber, input.length);
+            }
+        } else {
+            return input;
+        }
+    }
+
+    private right(input: string, parameter: string) {
+        const parameterNumber = Number(parameter);
+        if (!isNaN(parameterNumber)) {
+            if (parameterNumber === 0) {
+                return input;
+            } else if (parameterNumber > 0) {
+                return input.substring(input.length - parameterNumber, input.length);
+            } else {
+                return input.substring(0, input.length + parameterNumber);
+            }
+        } else {
+            return input;
+        }
     }
 
 }

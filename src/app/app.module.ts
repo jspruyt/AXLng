@@ -6,12 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { NgxSoapModule } from 'ngx-soap';
 import { SOAPService, Client } from 'ngx-soap';
 
-
 import { AppComponent } from './app.component';
 import { ToolListComponent } from './tool-list.component';
 import { TesterToolComponent } from './tester-tool.component';
 import { WsdlCombineService } from './wsdl-combine.service';
 import { AxlService } from './axl.service';
+import { PercentService } from './percent.service';
 
 const appRoutes: Routes = [
   { path: 'tools', component: ToolListComponent },
@@ -44,6 +44,7 @@ const appRoutes: Routes = [
   providers: [
     WsdlCombineService,
     AxlService,
+    PercentService,
   ],
   bootstrap: [AppComponent]
 })

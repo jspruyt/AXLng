@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
+
 import { IFragment, TextFragment, VariableFragment, Pipe } from './percent.model';
 
 @Injectable()
 export class PercentService {
 
-    token = '%';
+    private token = '%';
+    private data: any;
 
-    constructor(
-        private data: any,
-    ) { }
+    constructor() {
+        this.data = new Object();
+    }
 
     public parse(template: string, dataObject: any): string {
         this.data = dataObject;
         const ast: IFragment[] = [];
-
-        const matches = template.split(`/(${this.token}.+?${this.token})/`)
+        const reg = `(${this.token}.+?${this.token})`;
+        // const reg = '%';
+        const matches = template.split(new RegExp(reg));
         for (const fragment of matches) {
             ast.push(this.determine(fragment));
         }
@@ -34,14 +37,18 @@ export class PercentService {
     }
 
     private parseVariable(fragment: string): VariableFragment {
-        fragment = fragment.replace(this.token, '');
+        fragment = fragment.replace(new RegExp(this.token, 'g'), '').trim();
         const pipes = fragment.split('|');
-        const symbol = pipes[0];
+        const symbol = pipes[0].trim();
         const variableFragment = new VariableFragment(symbol, this.resolve(symbol));
         pipes.forEach(function (pipe: string, i) {
             if (i > 0) {
-                const parts = pipe.split(':');
-                variableFragment.addPipe(new Pipe(parts[0], parts[1]))
+                if (pipe.indexOf(':') !== -1) {
+                    const parts = pipe.split(':');
+                    variableFragment.addPipe(new Pipe(parts[0].trim(), parts[1].trim()));
+                } else {
+                    variableFragment.addPipe(new Pipe(pipe.trim()));
+                }
             }
         });
         return variableFragment;

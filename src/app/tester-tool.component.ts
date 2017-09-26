@@ -21,6 +21,15 @@ export class TesterToolComponent implements OnInit {
 
   ngOnInit() {
     this.axl.ngOnInit();
+    this.field1 = `1. % display %
+    2. %display | upper %
+    3. %display | left  :   5  %
+    4. %display|left  : -5 %
+    5. %display|right:4%
+    6. %display|right:-4%
+    7. %display|right:-4|lower%
+    `;
+    this.field2 = '{"display" : "Jonathan SPRUYT"}';
   }
 
 
