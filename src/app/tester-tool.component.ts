@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import * as yaml from 'js-yaml';
 
 import { AxlService } from './axl.service';
 import { PercentService } from './percent.service';
@@ -63,4 +64,11 @@ export class TesterToolComponent implements OnInit {
     this.output = this.percent.parse(this.field1, JSON.parse(this.field2));
   }
 
+  testYaml() {
+    let yamlObj = '';
+    const yamlDoc: any = yaml.safeLoadAll(this.percent.parse(this.field1, JSON.parse(this.field2)), function (doc) {
+      yamlObj += JSON.stringify(doc, null, 2);
+    });
+    this.output = yamlObj;
+  }
 }
