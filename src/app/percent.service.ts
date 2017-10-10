@@ -14,6 +14,7 @@ export class PercentService {
 
     public parse(template: string, dataObject: any): string {
         this.data = dataObject;
+        // create Abstract Syntax Tree
         const ast: IFragment[] = [];
         const reg = `(${this.token}.+?${this.token})`;
         // const reg = '%';
@@ -26,6 +27,20 @@ export class PercentService {
             output += fragment.render();
         })
         return output;
+    }
+
+    public getVariables(template: string): string[] {
+        const variables: string[] = [];
+        const regString = `/${this.token}([^|]+?).*?${this.token}/g`;
+        const reg = new RegExp(regString);
+        let match = reg.exec(template);
+        while (match !== null) {
+            if (variables.includes(match[1])) {
+                variables.push(match[1]);
+            }
+            match = reg.exec(template);
+        }
+        return variables;
     }
 
     private determine(fragment: string): IFragment {
