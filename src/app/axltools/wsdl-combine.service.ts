@@ -49,7 +49,9 @@ export class WsdlCombineService {
     private fetchWsdl(url: string): Observable<string> {
         console.log('fetching: ' + url);
         return this.http.get(url)
-            .map(response => response.text() as string)
+            .map(response => {
+                return response.text() as string;
+            })
             .catch((error: any) => {
                 console.log(`Error occured: ${error}`);
                 return Observable.throw('cannot fetch wsdl');
@@ -57,7 +59,7 @@ export class WsdlCombineService {
     };
 
     private getBasePath(url: string): string {
-        let parts: string[] = url.split('/');
+        const parts: string[] = url.split('/');
         parts.pop();
         return parts.join('/');
     }

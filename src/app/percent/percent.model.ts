@@ -1,3 +1,4 @@
+
 export interface IFragment {
 
     render(): string;
@@ -9,7 +10,7 @@ export class Pipe {
     constructor(
         private pipe: string = '',
         private parameter: string = ''
-    ) {}
+    ) { }
 
     public apply(input) {
         return this[this.pipe](input, this.parameter);
@@ -60,9 +61,9 @@ export class Pipe {
 }
 
 export class TextFragment implements IFragment {
-    constructor (
+    constructor(
         private text: string = '',
-    ) {}
+    ) { }
 
     public render() {
         return this.text;
@@ -72,11 +73,11 @@ export class TextFragment implements IFragment {
 
 export class VariableFragment implements IFragment {
 
-    constructor (
+    constructor(
         private variable: string = '',
         private value: string = '',
         private pipes: Pipe[] = []
-    ) {}
+    ) { }
 
     public render() {
         let render: string = this.value;

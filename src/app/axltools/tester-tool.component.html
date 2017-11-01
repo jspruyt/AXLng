@@ -1,0 +1,29 @@
+<label>FIELD 1<textarea ngDefaultControl [(ngModel)]="field1" rows="10"></textarea></label>
+<label>FIELD 2<textarea ngDefaultControl [(ngModel)]="field2" rows="10"></textarea></label>
+
+
+<button (click)="testConnectionAxl()">Test Connection</button>
+<button (click)="getPhoneAxl()">Get Phone</button>
+<button (click)="getVariables()">Variables</button>
+
+<hr/>
+<hr/>
+
+<div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+
+    <div *ngFor="let variable of variables" class="form-row">
+      <label [attr.for]="variable">{{variable}}</label>
+      <input [formControlName]="variable" [id]="variable" >
+    </div>
+
+    <div class="form-row">
+      <button type="submit">Upload</button>
+    </div>
+  </form>
+
+</div>
+
+<hr/>
+<hr/>
+<pre>{{output}}</pre>

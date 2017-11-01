@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { IFragment, TextFragment, VariableFragment, Pipe } from './percent.model';
 
 @Injectable()
@@ -29,13 +28,19 @@ export class PercentService {
         return output;
     }
 
-    public getVariables(template: string): string[] {
+    public parseVoid(template: string): string {
+        const reg = `${this.token}`;
+        return template.replace(new RegExp(reg, 'g'), '');
+    }
+
+
+    public listVariables(template: string): string[] {
         const variables: string[] = [];
-        const regString = `/${this.token}([^|]+?).*?${this.token}/g`;
-        const reg = new RegExp(regString);
+        const regString = `${this.token}([^\\s|%]+).*?${this.token}`;
+        const reg = new RegExp(regString, 'g');
         let match = reg.exec(template);
         while (match !== null) {
-            if (variables.includes(match[1])) {
+            if (!variables.includes(match[1])) {
                 variables.push(match[1]);
             }
             match = reg.exec(template);

@@ -1,0 +1,70 @@
+<div id="content">
+    <mat-form-field>
+        <mat-select id="recipes" [(ngModel)]="recipeName" (change)="onRecipeChange()" placeholder="Select a recipe">
+            <mat-option *ngFor="let recipe of recipeList" [value]="recipe.name">{{recipe.name}}: {{recipe.description}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+
+    <div class="form" *ngIf="form">
+        <mat-slide-toggle [(ngModel)]="isBulk" color="accent">Bulk</mat-slide-toggle>
+        <form (ngSubmit)="onSubmit()" [formGroup]="form" fxLayout="column">
+            <div [hidden]="!isBulk">
+                <mat-form-field >
+                        <textarea matInput placeholder="Bulk CSV" class="monospace" [formControlName]="'bulk'" [id]="'bulk'" rows="5"></textarea>
+                        <mat-hint align="begin">Paste a CSV file based on the headers shown</mat-hint>
+                </mat-form-field>
+                <br/>
+                <br/>
+            </div>
+            
+
+            <div [hidden]="isBulk">
+                <mat-form-field *ngFor="let variable of recipe.variables" >
+                        <input matInput [formControlName]="variable.symbol" [id]="variable.symbol" placeholder="{{variable.symbol}}">
+                        <mat-hint align="begin">{{variable.label}}</mat-hint>
+                </mat-form-field>
+                <br/>
+            </div>
+            <br/>
+            <br/>
+
+            <div [hidden]="isBulk">
+                <div *ngFor="let dependency of recipe.dependencies" class="form-row">
+                     <mat-checkbox [formControlName]="dependency" [id]="dependency">{{dependency}}</mat-checkbox>
+                </div>
+            </div>
+            <br/>
+            <br/>
+
+            <div class="form-row">
+                <button mat-raised-button type="submit" color="primary">Upload</button>
+            </div>
+        </form>
+
+    </div>
+
+    <progress-log [bulkProgress]="bulkProgress" [stepProgress]="stepProgress" [recipe]="recipe" [currentStep]="currentStep" [errors]="errors"
+        [results]="results" color="accent"></progress-log>
+
+    <div class="results">
+            <div >
+                <mat-card class="log results">
+                    <mat-card-title>
+                            <i class="material-icons green-font">check_circle</i>  Title
+                        </mat-card-title>
+                    <mat-card-subtitle>Subtitle</mat-card-subtitle>
+                    <mat-expansion-panel class="mat-elevation-z0">
+                            <mat-expansion-panel-header collapsedHeight="36px" expandedHeight="36px">
+                                <mat-panel-title>
+                                    Details
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-card-content>Detail info</mat-card-content>
+                        </mat-expansion-panel>
+                </mat-card>
+            </div>
+        </div>
+
+</div>

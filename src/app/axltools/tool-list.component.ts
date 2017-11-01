@@ -10,9 +10,11 @@ export class ToolListComponent implements OnInit {
         { 'title': 'AXL Creator', 'url': 'creator' },
         { 'title': 'AXL Query', 'url': 'query' },
         { 'title': 'AXL Updater', 'url': 'updater' },
-        { 'title': 'AXL Tester', 'url': 'tester' }
+        { 'title': 'AXL Tester', 'url': 'tester' },
+        { 'title': 'AXL Recipes', 'url': 'recipes' }
+
     ];
-    
+
     constructor() { }
 
     ngOnInit() { }

@@ -1,0 +1,9 @@
+<div id="content" fxLayout fxLayoutGap="20px" fxLayoutWrap="wrap">
+    <mat-card *ngFor="let tool of tools" fxFlex="31%">
+        <mat-card-title>{{tool.title}}</mat-card-title>
+        <mat-card-content>{{tool.title}}</mat-card-content>
+        <mat-card-actions>
+            <a mat-button routerLink="/{{tool.url}}">Open</a>
+        </mat-card-actions>
+    </mat-card>
+</div>
