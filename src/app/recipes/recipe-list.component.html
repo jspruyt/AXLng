@@ -1,25 +1,11 @@
 <div id="content" fxLayoutGap="10px">
-    <div *ngFor="let recipe of recipeList" class="col s12 m3">
-        <div class="card blue-grey">
-            <div class="card-content white-text yaml">
-                <span class="card-title">{{recipe.name}}</span>
-                <p>{{recipe.description}}</p>
-            </div>
-            <div class="card-action">
-                <a href="/recipes/{{recipe.name}}">Edit</a>
-                <a href="#">Delete</a>
-            </div>
-        </div>
-    </div>
-    <div class="col s12 m3">
-        <div class="card blue-grey">
-            <div class="card-content white-text yamlnew">
-                <span class="card-title">Add new</span>
-                <p>Add new recipe</p>
-            </div>
-            <div class="card-action">
-                <a href="/recipes/new">Create new</a>
-            </div>
-        </div>
-    </div>
+    <mat-card *ngFor="let recipe of recipeList" fxFlex="31%">
+        <mat-card-title>{{recipe.name}}</mat-card-title>
+        <mat-card-content>{{recipe.description}}</mat-card-content>
+        <mat-card-actions>
+            <button mat-button routerLink="/recipes/{{recipe.name}}">Edit</button>
+            <button mat-button >Delete</button>
+        </mat-card-actions>
+    </mat-card>
 </div>
+<button mat-raised-button  color="primary" routerLink="/recipes/new"><mat-icon>note_add</mat-icon>Add recipe</button>

@@ -13,6 +13,8 @@ import {
     MatOptionModule,
     MatInputModule,
     MatExpansionModule,
+    MatIconModule,
+    MatDialogModule,
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -34,6 +36,7 @@ import { PercentService } from './percent/percent.service';
 import { RecipeService } from './recipes/recipe.service';
 import { WsdlCombineService } from './axltools/wsdl-combine.service';
 import { ProgressLogComponent } from './axltools/progress-log.component';
+import { LoginDialogComponent } from './login/login-dialog.component';
 
 const appRoutes: Routes = [
     { path: 'tools', component: ToolListComponent },
@@ -58,6 +61,7 @@ const appRoutes: Routes = [
         ToolListComponent,
         TesterToolComponent,
         ProgressLogComponent,
+        LoginDialogComponent,
     ],
     imports: [
         BrowserModule,
@@ -82,6 +86,8 @@ const appRoutes: Routes = [
         MatOptionModule,
         MatInputModule,
         MatExpansionModule,
+        MatIconModule,
+        MatDialogModule,
     ],
     providers: [
         AxlService,
@@ -89,6 +95,9 @@ const appRoutes: Routes = [
         RecipeService,
         WsdlCombineService,
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [
+        AppComponent,
+    ],
+    entryComponents: [LoginDialogComponent]
 })
 export class AppModule { }

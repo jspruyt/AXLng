@@ -20,15 +20,10 @@ import { AxlResult } from './model';
 @Injectable()
 export class AxlService {
 
-    private opt = { forceSoap12Headers: true };
-    private headers: Headers;
-    private wsdlUrl = '/assets/wsdl/CUCM/11.0/AXLAPI.wsdl';
-    // private axlUrl = 'https://ucm1.dcloud.cisco.com:8443/axl/';
-    private axlUrl = 'https://10.170.126.10:8443/axl/';
-    // private user = 'AXLAdmin';
-    private user = 'AXLJOSP';
-    // private password = '12345';
-    private password = 'D1data123';
+    private username: string;
+    private password: string;
+    private axlUrl: string;
+    public initialized = false;
     private client: Client;
 
     constructor(
@@ -37,8 +32,14 @@ export class AxlService {
         private wsdl: WsdlCombineService,
     ) { }
 
-    init(): Observable<boolean> {
-        return this.wsdl.getEmbeddedWsdl('/assets/wsdl/CUCM/11.0/AXLAPI.wsdl')
+    init(version: string, hostname: string, username: string, password: string): Observable<boolean> {
+        this.username = username;
+        this.password = password;
+
+        this.axlUrl = `https://${hostname}:8443/axl/`;
+        const wsdlUrl = `/assets/wsdl/CUCM/${version}/AXLAPI.wsdl`;
+
+        return this.wsdl.getEmbeddedWsdl(wsdlUrl)
             .mergeMap(response => {
                 if (response) {
                     const opt = {
@@ -49,6 +50,7 @@ export class AxlService {
                         .map((client: Client) => {
                             this.client = client;
                             console.log(client);
+                            this.initialized = true;
                             return true;
                         });
                 }
@@ -57,12 +59,15 @@ export class AxlService {
 
 
     private addAuth(headers: any): Headers {
-        headers = new Headers(headers);
-        const hash = this.user + ':' + this.password;
-        return headers.append('Authorization', 'Basic ' + Base64.encode(hash));
+        const authHeaders = new Headers(headers)
+        const hash = this.username + ':' + this.password;
+        authHeaders.append('Authorization', 'Basic ' + Base64.encode(hash));
+        return authHeaders;
     }
 
     callOperation(operation: string, args: any): Observable<any> {
+        const logInfo = args.hasOwnProperty('loginfo') ? ': ' + args.loginfo : '';
+        const title = operation + logInfo;
         if (operation && args) {
             return this.getSoapRequest(operation, args, this.client)
                 .mergeMap(request => {
@@ -70,25 +75,34 @@ export class AxlService {
                         .map(response => {
                             const returnObject = this.client.parseResponseBody(response.text());
                             const soapResponse = returnObject.Body[operation + 'Response'];
-                            const axlResult = new AxlResult(true, operation, JSON.stringify(soapResponse, null, 2));
+                            const axlResult = new AxlResult(true, title, 'Operation succesful', JSON.stringify(soapResponse, null, 2));
                             return axlResult;
                         })
                         .catch((error: any) => {
                             console.log('error on POST:');
                             console.log(error);
-                            const axlResult = new AxlResult(false, operation, this.getHttpError(error), JSON.stringify(args, null, 2));
+                            const axlResult = new AxlResult(false, title, this.getHttpError(error), JSON.stringify(args, null, 2));
                             return Observable.of(axlResult);
                         });
                 })
                 .catch((error: any) => {
                     console.log('error on getSoap:');
                     console.log(error);
-                    const axlResult = new AxlResult(false, operation, 'SOAP Request cannot be created', args);
+                    const axlResult = new AxlResult(false, title, 'SOAP Request cannot be created', args);
                     return Observable.of(axlResult);
                 });
         } else {
-            return Observable.throw(new AxlResult(false, operation, 'invalid request', args));
+            return Observable.throw(new AxlResult(false, title, 'invalid request', args));
         }
+    }
+
+    testConnection(): Observable<boolean> {
+        const request = {
+            searchCriteria: [{ name: '%' }],
+            returnedTags: [{ name: '' }]
+        };
+        return this.callOperation('listProcessNode', request)
+            .map(result => result.successful);
     }
 
     getHttpError(error: any): string {

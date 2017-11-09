@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Enter AXL Details</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <input matInput [(ngModel)]="data.hostname" id="hostname" placeholder="AXL Server">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select id="version" [(ngModel)]="data.version" placeholder="Select an API version">
+            <mat-option *ngFor="let version of versions" [value]="version">{{version}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [(ngModel)]="data.username" id="username" placeholder="User Name">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [(ngModel)]="data.password" id="password" placeholder="Password" type="password">
+    </mat-form-field>
+    
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button [mat-dialog-close]="data" color="primary">Connect</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+</div>

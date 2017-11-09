@@ -8,39 +8,36 @@
     <br />
     <div class="errors">
         <div *ngFor="let error of errors">
-            <mat-card class="log errors">
-                <mat-card-title>
-                    <i class="material-icons red-font">error</i>  {{error.operation}}
-                </mat-card-title>
-                <mat-card-subtitle>{{error.message}}</mat-card-subtitle>
-                <mat-expansion-panel class="mat-elevation-z0">
-                    <mat-expansion-panel-header collapsedHeight="24px" expandedHeight="32px">
-                        <mat-panel-title>
-                            Details
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <mat-card-content>{{error.payload}}</mat-card-content>
-                </mat-expansion-panel>
-
-            </mat-card>
+            <mat-expansion-panel class="error log">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon class="fail">error</mat-icon>
+                        {{error.operation}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        {{error.message}}
+                    </mat-panel-description>
+                    
+                </mat-expansion-panel-header>
+                {{error.payload}}
+            </mat-expansion-panel>
         </div>
     </div>
     <div class="results">
         <div *ngFor="let result of results">
-            <mat-card class="log results">
-                <mat-card-title>
-                        <i class="material-icons green-font">check_circle</i>  {{result.operation}}
-                    </mat-card-title>
-                <mat-card-subtitle>{{result.message}}</mat-card-subtitle>
-                <mat-expansion-panel class="mat-elevation-z0">
-                        <mat-expansion-panel-header collapsedHeight="24px" expandedHeight="32px">
+                <mat-expansion-panel class="result log">
+                        <mat-expansion-panel-header>
                             <mat-panel-title>
-                                Details
+                                <mat-icon class="success">check_circle</mat-icon>
+                                {{result.operation}}
                             </mat-panel-title>
+                            <mat-panel-description>
+                                {{result.message}}
+                            </mat-panel-description>
+                            
                         </mat-expansion-panel-header>
-                        <mat-card-content>{{result.payload}}</mat-card-content>
+                        {{result.payload}}
                     </mat-expansion-panel>
-            </mat-card>
         </div>
     </div>
 </div>

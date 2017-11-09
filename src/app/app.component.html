@@ -1,7 +1,12 @@
 <div class="container">
     <mat-toolbar color="primary">
-        <a href="#"><i class="material-icons">menu</i></a>
-        <span>AXL Tools</span>        
+        <button class="toolbar" mat-button routerLink="/"><mat-icon class="toolbar">menu</mat-icon>AXL Tools</button>
+        <span class="spacer"></span>
+        <span class="toolbarstatus">{{status}}</span>
+        <button class="toolbar" mat-button (click)="openLogin()">
+            <mat-icon *ngIf="!isConnected" class="account" >cloud_off</mat-icon>
+            <mat-icon *ngIf="isConnected" class="account" >cloud_done</mat-icon>
+        </button>
     </mat-toolbar>
     <router-outlet></router-outlet>
 </div>

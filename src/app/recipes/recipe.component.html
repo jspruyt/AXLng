@@ -1,30 +1,20 @@
-
-    <div class="form-row">
-        <label for="recipeName">Recipe Name</label>
-        <input id="recipeName" type="text" [(ngModel)]="recipeName">
-    </div>
-    <br/>
-    <div class="form-row">
-        <label for="recipeDescription">Recipe Description</label>
-        <input id="recipeDescription" type="text" [(ngModel)]="recipeDescription">
-    </div>
-    <br/>
-    <div class="form-row">
-        <button (click)="saveRecipe()">Save</button>
-        <button (click)="closeRecipe()">Close</button>        
-        <button (click)="deleteRecipe()">Delete</button>        
-        <button (click)="clearAll()">Clear Storage</button>      
-        <button (click)="listAll()">List Storage</button>      
-    </div>
-<!-- <pre>{{output}}</pre> -->
-
+<div id="content">
+    <mat-form-field>
+    <input matInput placeholder="Recipe Name" [(ngModel)]="recipeName">
+</mat-form-field>
 <br/>
-<div ace-editor
-[(text)]="recipeTemplate"
-[mode]="'yamlx'"
-[theme]="'monokai'"
-[options]="aceOptions"
-[readOnly]="false"
-[autoUpdateContent]="true"
-[durationBeforeCallback]="2500"
-style="min-height: 180px; width:100%; overflow: auto;"></div>
+<mat-form-field>
+    <input matInput placeholder="Recipe Description" [(ngModel)]="recipeDescription">
+</mat-form-field>
+<br/>
+<br/>
+<div>
+<button mat-raised-button color="primary" (click)="saveRecipe()">Save</button>
+<button mat-raised-button (click)="closeRecipe()">Close</button>
+<button mat-raised-button (click)="clearAll()">Clear Storage</button>
+<button mat-raised-button (click)="listAll()">List Storage</button>
+</div>
+<br/>
+<div ace-editor [(text)]="recipeTemplate" [mode]="'yamlx'" [theme]="'monokai'" [options]="aceOptions" [readOnly]="false"
+    [autoUpdateContent]="true" [durationBeforeCallback]="2500" style="min-height: 180px; width:100%; overflow: auto;"></div>
+</div>

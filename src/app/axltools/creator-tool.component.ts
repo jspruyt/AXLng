@@ -53,20 +53,6 @@ export class CreatorToolComponent implements OnInit {
         this.results = [];
         this.recipeList = this.recipes.getRecipes();
         this.recipeName = '0';
-        this.loadAxl();
-    }
-
-    loadAxl() {
-        // this.axl.init().subscribe(success => {
-        //     console.log('AXL Client succesfully loaded');
-        // });
-        Observable.timer(2000)
-            .mergeMap((x) => {
-                return this.axl.init();
-            })
-            .subscribe(success => {
-                console.log('AXL Client succesfully loaded');
-            });
     }
 
     onRecipeChange() {
@@ -156,7 +142,7 @@ export class CreatorToolComponent implements OnInit {
     createRecipe(values: any): Observable<boolean> {
         return this.executeSteps(values)
             .map(result => {
-                if (result.noError) {
+                if (result.successful) {
                     this.results.push(result);
                 } else {
                     this.errors.push(result);
@@ -217,7 +203,7 @@ export class CreatorToolComponent implements OnInit {
     checkDependency(step: any, values: any): boolean {
         let dependencyOK = true;
         if (step.hasOwnProperty('options') && step['options']) {
-            if (step.options.hasOwnProperty('dependency') && step['dependency']) {
+            if (step.options.hasOwnProperty('dependency') && step.options['dependency']) {
                 if (!(values.hasOwnProperty(step.options.dependency) && values[step.options.dependency])) {
                     dependencyOK = false;
                 }

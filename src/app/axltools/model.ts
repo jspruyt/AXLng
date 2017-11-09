@@ -2,7 +2,7 @@
 export class AxlResult {
 
     constructor(
-        public noError: boolean,
+        public successful: boolean,
         public operation: string,
         public message: string,
         public payload?: any
