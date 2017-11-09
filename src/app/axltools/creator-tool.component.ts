@@ -36,6 +36,7 @@ export class CreatorToolComponent implements OnInit {
     errors: AxlResult[];
     bulkProgress = 0;
     stepProgress = 0;
+    progressStarted = false;
     bulkIncrement: number;
     stepIncrement: number;
     stepIncrementOriginal: number;
@@ -95,9 +96,10 @@ export class CreatorToolComponent implements OnInit {
     generateForm() {
         if (this.recipe !== null) {
             const group: any = {};
-            group['bulk'] = new FormControl(this.recipe.variables.map(variable => {
-                return variable.symbol;
-            }).join(','));
+            group['bulk'] = new FormControl(this.recipe.variables
+                .map(variable => variable.symbol)
+                .concat(this.recipe.dependencies)
+                .join(','));
             this.recipe.variables.forEach(variable => {
                 group[variable.symbol] = new FormControl('');
             });
@@ -110,8 +112,13 @@ export class CreatorToolComponent implements OnInit {
 
     onSubmit() {
         console.log('submitting: ' + JSON.stringify(this.form.value));
-        this.resetProgress();
-        this.create();
+        if (this.axl.initialized) {
+            this.resetProgress();
+            this.progressStarted = true;
+            this.create();
+        } else {
+            console.log('AXL client not initialized');
+        }
     }
 
     create() {

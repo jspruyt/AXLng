@@ -45,7 +45,7 @@
 
     </div>
 
-    <progress-log [bulkProgress]="bulkProgress" [stepProgress]="stepProgress" [recipe]="recipe" [currentStep]="currentStep" [errors]="errors"
+    <progress-log [hidden]="!progressStarted" [bulkProgress]="bulkProgress" [stepProgress]="stepProgress" [recipe]="recipe" [currentStep]="currentStep" [errors]="errors"
         [results]="results" color="accent"></progress-log>
 
 
