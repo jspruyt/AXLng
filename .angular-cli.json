@@ -6,10 +6,11 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "dist",
+      "outDir": "../www/axl",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        ".htaccess"
       ],
       "index": "index.html",
       "main": "main.ts",

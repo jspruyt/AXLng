@@ -15,7 +15,7 @@ export class LoginDialogComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.versions = ['11.0', '11.5'];
+        this.versions = ['8.0', '8.5', '9.0', '9.1', '10.0', '10.5', '11.0'];
     }
 
     onNoClick(): void {

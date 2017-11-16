@@ -49,6 +49,20 @@ export class Recipe {
         return JSON.stringify(jsonRecipe);
     }
 
+    validate(): boolean {
+        console.log('validating recipe');
+        try {
+            const voidTemplate = this.percent.parseVoid(this.template);
+            yaml.safeLoadAll(voidTemplate, doc => {});
+        } catch (error) {
+            console.log('recipe not valid:');
+            console.log(error);
+            return false;
+        }
+        console.log('recipe valid')
+        return true;
+    }
+
     private loadTemplate() {
         this.templateDocuments = YamlHelper.splitDocuments(this.template);
         this.loadVariables();
@@ -86,8 +100,12 @@ export class Recipe {
 
     private addDependencies(options: any) {
         if (options.hasOwnProperty('dependency') && options['dependency']) {
-            if (!this.dependencies.includes(options['dependency'])) {
-                this.dependencies.push(options['dependency']);
+            let dep = options['dependency'] as string;
+            if (dep.startsWith('!')) {
+                dep = dep.substr(1);
+            }
+            if (!this.dependencies.includes(dep)) {
+                this.dependencies.push(dep);
             }
         }
     }

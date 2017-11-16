@@ -120,6 +120,8 @@ export class AxlService {
                     return soapFault;
                 }
                 break;
+            case 599:
+                return 'AXL API version not supported';
             case 0:
                 return 'Connection to AXL Server cannot be established';
             default:

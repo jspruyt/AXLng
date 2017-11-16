@@ -211,8 +211,16 @@ export class CreatorToolComponent implements OnInit {
         let dependencyOK = true;
         if (step.hasOwnProperty('options') && step['options']) {
             if (step.options.hasOwnProperty('dependency') && step.options['dependency']) {
-                if (!(values.hasOwnProperty(step.options.dependency) && values[step.options.dependency])) {
-                    dependencyOK = false;
+                let dep = step.options['dependency'] as string;
+                if (dep.startsWith('!')) {
+                    dep = dep.substr(1);
+                    if ((values.hasOwnProperty(dep) && values[dep])) {
+                        dependencyOK = false;
+                    }
+                } else {
+                    if (!(values.hasOwnProperty(dep) && values[dep])) {
+                        dependencyOK = false;
+                    }
                 }
             }
         }

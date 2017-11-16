@@ -20,8 +20,12 @@ export class RecipeService {
     }
 
     saveRecipe(recipe: Recipe) {
-        const id = this.getKey(recipe.name);
-        localStorage.setItem(id, recipe.toJSON());
+        if (recipe.validate()) {
+            const id = this.getKey(recipe.name);
+            localStorage.setItem(id, recipe.toJSON());
+        } else {
+            console.log('error saving recipe, recipe not valid');
+        }
     }
 
     loadRecipe(name: string): Observable<Recipe> {

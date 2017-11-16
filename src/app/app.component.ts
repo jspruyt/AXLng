@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     password = 'D1data123';
     hostname = '10.170.126.10';
     version = '11.0';
-    status= 'test';
+    status= 'click to login';
 
     constructor(
         private axl: AxlService,
@@ -87,6 +87,9 @@ export class AppComponent implements OnInit {
                     .subscribe((x) => {
                         this.status = '';
                     })
+                } else {
+                    console.log('Cannot connect ot AXL server');
+                    this.status = 'Cannot connect ot AXL server';
                 }
             });
     }
