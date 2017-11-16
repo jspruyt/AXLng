@@ -82,10 +82,9 @@ export class TesterToolComponent implements OnInit {
                         console.log(err);
                     } else {
                         this.wsdlJson = result;
-                        const operationType = this.analyseChildanalyseOperation(this.field2);
+                        const operationType = this.analyseOperation(this.field2);
                         const cType = this.analyseType(operationType);
 
-                        
                         // this.output = result;
                     }
                 });
