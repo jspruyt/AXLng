@@ -14,8 +14,8 @@ import 'rxjs/add/observable/throw';
 
 import { AxlService } from '../axltools/axl.service';
 import { PercentService } from '../percent/percent.service';
-import { RecipeService } from '../recipes/recipe.service';
-import { Recipe, Step, Variable } from '../recipes/recipe.model';
+import { BlueprintService } from '../blueprints/blueprint.service';
+import { Blueprint, Step, Variable } from '../blueprints/blueprint.model';
 import { YamlHelper } from '../utils/yaml.helper';
 import { AxlResult, MultiArgument } from './model';
 
@@ -26,11 +26,11 @@ import { AxlResult, MultiArgument } from './model';
 
 export class CreatorToolComponent implements OnInit {
     @Input() form: FormGroup;
-    @Input() recipeName: string;
+    @Input() blueprintName: string;
     @Input() isBulk: boolean;
     @Input() bulk: string;
-    recipeList: Recipe[];
-    recipe: Recipe;
+    blueprintList: Blueprint[];
+    blueprint: Blueprint;
     output: string;
     results: AxlResult[];
     errors: AxlResult[];
@@ -46,23 +46,23 @@ export class CreatorToolComponent implements OnInit {
     constructor(
         private axl: AxlService,
         private percent: PercentService,
-        private recipes: RecipeService,
+        private blueprints: BlueprintService,
     ) { }
 
     ngOnInit() {
         this.errors = [];
         this.results = [];
-        this.recipeList = this.recipes.getRecipes();
-        this.recipeName = '0';
+        this.blueprintList = this.blueprints.getBlueprints();
+        this.blueprintName = '0';
     }
 
-    onRecipeChange() {
-        if (this.recipeName === '0') {
+    onBlueprintChange() {
+        if (this.blueprintName === '0') {
             this.form = null;
         } else {
-            this.recipes.loadRecipe(this.recipeName)
-                .subscribe(recipe => {
-                    this.recipe = recipe;
+            this.blueprints.loadBlueprint(this.blueprintName)
+                .subscribe(blueprint => {
+                    this.blueprint = blueprint;
                     this.generateForm();
                     this.resetProgress();
                 })
@@ -94,16 +94,16 @@ export class CreatorToolComponent implements OnInit {
     }
 
     generateForm() {
-        if (this.recipe !== null) {
+        if (this.blueprint !== null) {
             const group: any = {};
-            group['bulk'] = new FormControl(this.recipe.variables
+            group['bulk'] = new FormControl(this.blueprint.variables
                 .map(variable => variable.symbol)
-                .concat(this.recipe.dependencies)
+                .concat(this.blueprint.dependencies)
                 .join(','));
-            this.recipe.variables.forEach(variable => {
+            this.blueprint.variables.forEach(variable => {
                 group[variable.symbol] = new FormControl('');
             });
-            this.recipe.dependencies.forEach(dependency => {
+            this.blueprint.dependencies.forEach(dependency => {
                 group[dependency] = new FormControl('');
             })
             this.form = new FormGroup(group);
@@ -129,7 +129,7 @@ export class CreatorToolComponent implements OnInit {
                 } else {
                     this.bulkIncrement = 100 / arr.length;
                     arr.forEach(values => {
-                        this.createRecipe(values)
+                        this.createBlueprint(values)
                         .subscribe(success => {}, error => {}, () => {
                             this.progressBulk()
                         });
@@ -139,14 +139,14 @@ export class CreatorToolComponent implements OnInit {
         } else {
             this.bulkIncrement = 100;
             // this.executeTemplate(this.form.value);
-            this.createRecipe(this.form.value)
+            this.createBlueprint(this.form.value)
                 .subscribe(success => {}, error => {}, () => {
                     this.progressBulk()
                 });
         }
     }
 
-    createRecipe(values: any): Observable<boolean> {
+    createBlueprint(values: any): Observable<boolean> {
         return this.executeSteps(values)
             .map(result => {
                 if (result.successful) {
@@ -167,12 +167,12 @@ export class CreatorToolComponent implements OnInit {
 
     executeSteps(values: any): Observable<AxlResult> {
         console.log('executing: ' + JSON.stringify(values));
-        const parsedRecipe = this.percent.parse(this.recipe.template, values);
-        this.setStepIncrement(100 / this.recipe.steps.length);
-        const documents = yaml.safeLoadAll(parsedRecipe, (doc) => { });
+        const parsedBlueprint = this.percent.parse(this.blueprint.template, values);
+        this.setStepIncrement(100 / this.blueprint.steps.length);
+        const documents = yaml.safeLoadAll(parsedBlueprint, (doc) => { });
         let steps = Observable.from(documents).onErrorResumeNext();
 
-        if (this.recipe.hasVarDefinition) {
+        if (this.blueprint.hasVarDefinition) {
             steps = steps.skip(1);
         }
 
@@ -203,7 +203,7 @@ export class CreatorToolComponent implements OnInit {
             .catch((error: any) => {
                 console.log('error on Step Execution:');
                 console.log(error);
-                return Observable.of(new AxlResult(false, this.recipe.name, 'error on step execution', values));
+                return Observable.of(new AxlResult(false, this.blueprint.name, 'error on step execution', values));
             });
     }
 

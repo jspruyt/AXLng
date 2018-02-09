@@ -99,7 +99,7 @@ export class TesterToolComponent implements OnInit {
         const operation = elementArray.filter(element => element.$.name === operationName);
         this.output = 'operation: ' + operation[0].$.name as string;
         this.output += '\n';
-        this.output += 'arguments:\n';
+        this.output += 'arguments:';
 
         let operationType = operation[0]['$'].type as string;
         operationType = operationType.replace('axlapi:', '');
@@ -115,74 +115,110 @@ export class TesterToolComponent implements OnInit {
 
         const typeObject = typeArray.filter(type => type.$.name === typeName)[0];
         if (typeObject) {
+            console.log(typeObject);
             this.analyseChild(typeObject);
         }
     }
 
-    analyseChild(obj: any) {
+    analyseChild(obj: any, parent?: string) {
         for (const prop in obj) {
             if (obj.hasOwnProperty(prop)) {
                 switch (prop) {
+                    case '$':
+                        switch (parent) {
+                            case 'xsd:element':
+                                if (obj.$.hasOwnProperty('name')) {
+                                    this.output += this.getIndent() + obj.$.name + ': ';
+                                }
+                                if (obj.$.hasOwnProperty('default')) {
+                                    this.output += obj.$.default;
+                                }
+                                if (obj.$.hasOwnProperty('minOccurs')) {
+                                    if (obj.$.minOccurs === '0') {
+                                        this.output += ' #optional';
+                                    }
+                                }
+                                if (obj.$.hasOwnProperty('type')) {
+                                    let typeName = obj.$.type as string;
+
+                                    if (typeName.startsWith('axlapi:')) {
+                                        typeName = typeName.replace('axlapi:', '');
+                                        this.output += ' #type: ' + typeName;
+                                        this.analyseType(typeName);
+                                    } else {
+                                        typeName = typeName.split(':')[1];
+                                        this.output += ' #type: ' + typeName;
+                                    }
+                                }
+                                break;
+
+                            case 'xsd:maxLength':
+                                if (obj.$.hasOwnProperty('value')) {
+                                    this.output += ' #maxlength: ' + obj.$.value;
+                                }
+                                break;
+
+                            case 'xsd:enumeration':
+                                if (obj.$.hasOwnProperty('value')) {
+                                    if (obj.$.value) {
+                                        this.output += obj.$.value + ', ';
+                                    }
+                                }
+                                break;
+                        }
+                        break;
                     case 'xsd:simpleType':
                     case 'xsd:union':
                     case 'xsd:restriction':
                     case 'xsd:complexType':
                     case 'xsd:complexContent':
                     case 'xsd:extension':
+                    case 'xsd:annotation':
+                    case 'xsd:maxLength':
                     case 'xsd:sequence':
                         if (Array.isArray(obj[prop])) {
-                            obj[prop].forEach(element => {
-                                this.analyseChild(element);
+                            obj[prop].forEach(node => {
+                                this.analyseChild(node, prop);
                             });
                         };
                         break;
                     case 'xsd:choice':
                         if (Array.isArray(obj[prop])) {
-                            obj[prop].forEach(element => {
-                                this.output += this.getIndent() + '#choice begin\n';
-                                this.analyseChild(element);
-                                this.output += this.getIndent() + '#choice end\n';
+                            obj[prop].forEach(node => {
+                                this.output += this.getIndent() + '#beginchoice\n';
+                                this.analyseChild(node, prop);
+                                this.output += this.getIndent() + '#endchoice\n';
                             });
                         };
                         break;
                     case 'xsd:element':
-                        this.indentLevel += 1;
-                        if (obj[prop][0].hasOwnProperty('$')) {
-                            if (obj[prop][0].$.hasOwnProperty('name')) {
-                                this.output += this.getIndent() + obj[prop][0].$.name;
-                            }
-                            if (obj[prop][0].$.hasOwnProperty('type')) {
-                                let typeName = obj[prop][0].$.type as string;
-                                if (typeName.startsWith('axlapi:')) {
-                                    typeName = typeName.replace('axlapi:', '');
-                                    this.analyseType(typeName);
-                                }
-                            }
-                        }
+                        this.indentLevel++;
                         if (Array.isArray(obj[prop])) {
-                            obj[prop].forEach(element => {
-                                this.output += this.getIndent() + '#choice begin\n';
-                                this.analyseChild(element);
-                                this.output += this.getIndent() + '#choice end\n';
+                            obj[prop].forEach(node => {
+                                this.output += '\n';
+                                this.analyseChild(node, prop);
                             });
                         };
+                        this.indentLevel--;
                         break;
-                    case 'xsd:annotation':
+
                     case 'xsd:documentation':
-                    if (Array.isArray(obj[prop])) {
-                        this.output += '    ##' + obj[prop][0];
-                    }
-                    case 'xsd:enumeration':
-                        if (obj[prop][0].hasOwnProperty('$')) {
-                            if (obj[prop][0].$.hasOwnProperty('value')) {
-                                this.output += ' #' + obj[prop][0].$.value;
-                            }
+                        if (Array.isArray(obj[prop])) {
+                            this.output += ' #documentation: ' + obj[prop][0];
                         }
+                        break;
+
+                    case 'xsd:enumeration':
+                        this.output += ' #options: '
+                        if (Array.isArray(obj[prop])) {
+                            obj[prop].forEach(node => {
+                                this.analyseChild(node, prop);
+                            });
+                        };
                         break;
                 }
             }
         }
-        this.indentLevel -= 1;
     }
 
     getIndent(): string {

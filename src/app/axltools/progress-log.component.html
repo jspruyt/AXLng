@@ -1,6 +1,6 @@
 <div>
-    <div *ngIf="recipe" class="operation">
-        <h3>{{recipe.name}}</h3>
+    <div *ngIf="blueprint" class="operation">
+        <h3>{{blueprint.name}}</h3>
         <p>{{currentStep}}</p>
         <mat-progress-bar mode="buffer" [value]="bulkProgress" [bufferValue]="stepProgress"></mat-progress-bar>
     </div>

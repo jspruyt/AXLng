@@ -8,16 +8,19 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { WsdlService } from '../axltools/wsdl.service';
+
 
 @Injectable()
 export class WsdlCombineService {
 
     constructor(
         private http: Http,
+        private wsdl: WsdlService,
     ) { }
 
     getEmbeddedWsdl(url: string): Observable<string> {
-        return this.fetchWsdl(url)
+        return this.wsdl.getWsdl(url)
             .mergeMap((wsdlResponse: string) => {
                 if (wsdlResponse) {
                     const parser = new DOMParser;
@@ -27,7 +30,7 @@ export class WsdlCombineService {
                         const importNode = importNodes[ix];
                         const schemaLocation = importNode.getAttribute('location');
                         if (schemaLocation.endsWith('.xsd')) {
-                            return this.fetchWsdl(this.getBasePath(url) + '/' + schemaLocation)
+                            return this.wsdl.getWsdl(this.getBasePath(url) + '/' + schemaLocation)
                                 .map(schemaResponse => {
                                     const schemaDoc = parser.parseFromString(schemaResponse, 'text/xml');
                                     const schemaNode = schemaDoc.getElementsByTagName('xsd:schema')[0];
@@ -45,18 +48,6 @@ export class WsdlCombineService {
                 return Observable.throw('cannot embed wsdl');
             });
     }
-
-    private fetchWsdl(url: string): Observable<string> {
-        console.log('fetching: ' + url);
-        return this.http.get(url)
-            .map(response => {
-                return response.text() as string;
-            })
-            .catch((error: any) => {
-                console.log(`Error occured: ${error}`);
-                return Observable.throw('cannot fetch wsdl');
-            })
-    };
 
     private getBasePath(url: string): string {
         const parts: string[] = url.split('/');

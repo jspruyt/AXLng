@@ -1,0 +1,20 @@
+<div id="content">
+    <mat-form-field>
+    <input matInput placeholder="Blueprint Name" [(ngModel)]="blueprintName">
+</mat-form-field>
+<br/>
+<mat-form-field>
+    <input matInput placeholder="Blueprint Description" [(ngModel)]="blueprintDescription">
+</mat-form-field>
+<br/>
+<br/>
+<div>
+<button mat-raised-button color="primary" (click)="saveBlueprint()">Save</button>
+<button mat-raised-button (click)="closeBlueprint()">Close</button>
+<button mat-raised-button (click)="clearAll()">Clear Storage</button>
+<button mat-raised-button (click)="listAll()">List Storage</button>
+</div>
+<br/>
+<div ace-editor [(text)]="blueprintTemplate" [mode]="'yamlx'" [theme]="'monokai'" [options]="aceOptions" [readOnly]="false"
+    [autoUpdateContent]="true" [durationBeforeCallback]="1000" style="min-height: 180px; width:100%; overflow: auto;"></div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Recipe } from '../recipes/recipe.model';
+import { Blueprint } from '../blueprints/blueprint.model';
 import { AxlResult } from './model';
 
 
@@ -11,7 +11,7 @@ import { AxlResult } from './model';
 
 export class ProgressLogComponent implements OnInit {
 
-    @Input() recipe: Recipe;
+    @Input() blueprint: Blueprint;
     @Input() currentStep: string;
     @Input() bulkProgress: number;
     @Input() stepProgress: number;

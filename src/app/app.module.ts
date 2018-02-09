@@ -27,13 +27,15 @@ import { AceEditorModule, AceEditorDirective, AceEditorComponent } from 'ng2-ace
 
 import { AppComponent } from './app.component';
 import { CreatorToolComponent } from './axltools/creator-tool.component';
-import { RecipeComponent } from './recipes/recipe.component';
-import { RecipeListComponent } from './recipes/recipe-list.component';
+import { BlueprintComponent } from './blueprints/blueprint.component';
+import { BlueprintListComponent } from './blueprints/blueprint-list.component';
 import { ToolListComponent } from './axltools/tool-list.component';
 import { TesterToolComponent } from './axltools/tester-tool.component';
+import { SchemaToolComponent } from './axltools/schema-tool.component';
 import { AxlService } from './axltools/axl.service';
+import { WsdlService } from './axltools/wsdl.service';
 import { PercentService } from './percent/percent.service';
-import { RecipeService } from './recipes/recipe.service';
+import { BlueprintService } from './blueprints/blueprint.service';
 import { WsdlCombineService } from './axltools/wsdl-combine.service';
 import { ProgressLogComponent } from './axltools/progress-log.component';
 import { LoginDialogComponent } from './login/login-dialog.component';
@@ -42,8 +44,9 @@ const appRoutes: Routes = [
     { path: 'tools', component: ToolListComponent },
     { path: 'creator', component: CreatorToolComponent },
     { path: 'tester', component: TesterToolComponent },
-    { path: 'recipes/:name', component: RecipeComponent},
-    { path: 'recipes', component: RecipeListComponent},
+    { path: 'blueprints/:name', component: BlueprintComponent},
+    { path: 'blueprints', component: BlueprintListComponent},
+    { path: 'schema', component: SchemaToolComponent},
     {
         path: '',
         redirectTo: '/tools',
@@ -56,12 +59,13 @@ const appRoutes: Routes = [
     declarations: [
         AppComponent,
         CreatorToolComponent,
-        RecipeComponent,
-        RecipeListComponent,
+        BlueprintComponent,
+        BlueprintListComponent,
         ToolListComponent,
         TesterToolComponent,
         ProgressLogComponent,
         LoginDialogComponent,
+        SchemaToolComponent,
     ],
     imports: [
         BrowserModule,
@@ -91,8 +95,9 @@ const appRoutes: Routes = [
     ],
     providers: [
         AxlService,
+        WsdlService,
         PercentService,
-        RecipeService,
+        BlueprintService,
         WsdlCombineService,
     ],
     bootstrap: [

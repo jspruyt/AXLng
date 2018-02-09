@@ -1,7 +1,7 @@
 <div id="content">
     <mat-form-field>
-        <mat-select id="recipes" [(ngModel)]="recipeName" (change)="onRecipeChange()" placeholder="Select a recipe">
-            <mat-option *ngFor="let recipe of recipeList" [value]="recipe.name">{{recipe.name}}: {{recipe.description}}</mat-option>
+        <mat-select id="blueprints" [(ngModel)]="blueprintName" (change)="onBlueprintChange()" placeholder="Select a blueprint">
+            <mat-option *ngFor="let blueprint of blueprintList" [value]="blueprint.name">{{blueprint.name}}: {{blueprint.description}}</mat-option>
         </mat-select>
     </mat-form-field>
 
@@ -21,7 +21,7 @@
             
 
             <div [hidden]="isBulk">
-                <mat-form-field *ngFor="let variable of recipe.variables" >
+                <mat-form-field *ngFor="let variable of blueprint.variables" >
                         <input matInput [formControlName]="variable.symbol" [id]="variable.symbol" placeholder="{{variable.symbol}}">
                         <mat-hint align="begin">{{variable.label}}</mat-hint>
                 </mat-form-field>
@@ -31,7 +31,7 @@
             <br/>
 
             <div [hidden]="isBulk">
-                <div *ngFor="let dependency of recipe.dependencies" class="form-row">
+                <div *ngFor="let dependency of blueprint.dependencies" class="form-row">
                      <mat-checkbox [formControlName]="dependency" [id]="dependency">{{dependency}}</mat-checkbox>
                 </div>
             </div>
@@ -45,7 +45,7 @@
 
     </div>
 
-    <progress-log [hidden]="!progressStarted" [bulkProgress]="bulkProgress" [stepProgress]="stepProgress" [recipe]="recipe" [currentStep]="currentStep" [errors]="errors"
+    <progress-log [hidden]="!progressStarted" [bulkProgress]="bulkProgress" [stepProgress]="stepProgress" [blueprint]="blueprint" [currentStep]="currentStep" [errors]="errors"
         [results]="results" color="accent"></progress-log>
 
 
